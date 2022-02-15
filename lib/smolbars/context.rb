@@ -5,8 +5,8 @@ require 'securerandom'
 module Smolbars
   class Context
     def initialize(**kwargs)
-      @@snapshot ||= MiniRacer::Snapshot.new(File.read(Handlebars::Source.bundled_path))
-      @js = MiniRacer::Context.new(kwargs.merge(snapshot: @@snapshot))
+      @js = MiniRacer::Context.new(kwargs)
+      @js.load(Handlebars::Source.bundled_path)
     end
 
     # Note that this is a hacky JS expression builder. We cannot pass JS AST in to mini_racer so we have to
