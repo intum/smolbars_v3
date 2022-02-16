@@ -8,8 +8,7 @@ module Smolbars
       if args.length == 0
         invocation = "%s(%s)" % [@fn, kwargs.to_json]
       else
-        raise "unsupported"
-        invocation = "%s(%s)" % [@fn, args.to_json]
+        invocation = "%s(%s)" % [@fn, args.first.to_json]
       end
       @context.eval(invocation)
     end

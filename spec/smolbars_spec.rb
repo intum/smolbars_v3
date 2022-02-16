@@ -3,8 +3,14 @@ describe(Smolbars::Context) do
 
   describe "a simple template" do
     let(:t) { compile("Hello {{name}}") }
-    it "allows simple substitution" do
+    it "allows simple substitution (kwargs)" do
       t.call(:name => 'World').should eql "Hello World"
+    end
+
+    it "allows simple substitution (positional args)" do
+      dummy_struct = Struct.new(:data)
+      dummy = dummy_struct.new({"name" => 'World'})
+      t.call(dummy.data).should eql "Hello World"
     end
   end
 
