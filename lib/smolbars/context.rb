@@ -5,7 +5,7 @@ require 'securerandom'
 module Smolbars
   class Context
     def initialize(**kwargs)
-      @js = MiniRacer::Context.new(kwargs)
+      @js = MiniRacer::Context.new(**kwargs)
       @js.load(Handlebars::Source.bundled_path)
     end
 
