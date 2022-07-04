@@ -79,6 +79,10 @@ underlying JS instance
 
     rspec spec/
 
+### Tests in Docker
+
+    docker compose run --rm  app bundle install && bundle exec rspec
+
 
 [1]: https://github.com/rubyjs/mini_racer "mini_racer"
 [2]: https://github.com/wycats/handlebars.js "Handlebars JavaScript templating library"
