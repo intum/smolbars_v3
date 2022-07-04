@@ -81,7 +81,13 @@ underlying JS instance
 
 ### Tests in Docker
 
-    docker compose run --rm  app bundle install && bundle exec rspec
+Building an image:
+
+    docker compose run --rm app bundle install
+
+Running tests:
+
+    docker compose run --rm app bundle exec rspec spec/
 
 
 [1]: https://github.com/rubyjs/mini_racer "mini_racer"
