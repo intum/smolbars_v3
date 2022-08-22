@@ -4,6 +4,18 @@ require 'securerandom'
 
 module Smolbars
   class Context
+    JS_ESCAPE_MAP = {
+      '\\'    => '\\\\',
+      "</"    => '<\/',
+      "\r\n"  => '\n',
+      "\n"    => '\n',
+      "\r"    => '\n',
+      '"'     => '\\"',
+      "'"     => "\\'",
+      "`"     => "\\`",
+      "$"     => "\\$"
+    }.freeze
+
     def initialize(**kwargs)
       @js = MiniRacer::Context.new(kwargs)
       @js.load(Handlebars::Source.bundled_path)
@@ -14,7 +26,7 @@ module Smolbars
     # manually escaping them
     def compile(template)
       handle = fn_handle
-      invocation = %Q{var #{handle} = Handlebars.compile(`#{template.gsub('`', "\`")}`);}
+      invocation = %{var #{handle} = Handlebars.compile("#{escape_javascript(template)}");}
       @js.eval(invocation)
       ::Smolbars::Template.new(self, handle)
     end
@@ -24,7 +36,7 @@ module Smolbars
     end
 
     def load_pattern(pattern)
-      Dir[pattern].each{ |path| load(path) }
+      Dir[pattern].each { |path| load(path) }
     end
 
     def load(path)
@@ -35,6 +47,15 @@ module Smolbars
 
     def fn_handle
       "js_fn_#{SecureRandom.hex}"
+    end
+
+    def escape_javascript(javascript)
+      javascript = javascript.to_s
+      if javascript.empty?
+        ''
+      else
+        javascript.gsub(/(\\|<\/|\r\n|\342\200\250|\342\200\251|[\n\r"']|[`]|[$])/u, JS_ESCAPE_MAP)
+      end
     end
   end
 end
